@@ -1,0 +1,126 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Stacja pogodowa"
+        Height="600" Width="950"
+        MinHeight="500" MinWidth="750"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Tytuł -->
+        <TextBlock Text="STACJA POGODOWA"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,15"/>
+
+        <!-- Filtrowanie -->
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    Margin="0,0,0,10">
+            <TextBlock Text="Wybierz stację:"
+                       VerticalAlignment="Center"
+                       Margin="0,0,10,0"/>
+
+            <ComboBox x:Name="cmbStacje"
+                      Width="200"
+                      SelectionChanged="cmbStacje_SelectionChanged"/>
+        </StackPanel>
+
+        <!-- Lista pomiarów -->
+        <DataGrid x:Name="dgPomiary"
+                  Grid.Row="2"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  SelectionMode="Single"
+                  Margin="0,0,0,15">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Stacja"
+                                    Binding="{Binding Stacja}"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Data"
+                                    Binding="{Binding Data, StringFormat=dd.MM.yyyy}"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Temperatura (°C)"
+                                    Binding="{Binding Temperatura}"
+                                    Width="*"/>
+            </DataGrid.Columns>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Typ}" Value="MAX">
+                            <Setter Property="Background" Value="LightGreen"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding Typ}" Value="MIN">
+                            <Setter Property="Background" Value="LightBlue"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+
+        <!-- Dodawanie pomiaru -->
+        <StackPanel Grid.Row="3">
+
+            <TextBlock Text="Dodaj nowy pomiar"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       Margin="0,0,0,8"/>
+
+            <WrapPanel Margin="0,0,0,10">
+                <TextBox x:Name="txtStacja"
+                         Width="170"
+                         Height="28"
+                         Margin="0,0,10,0"
+                         ToolTip="Nazwa stacji"
+                         VerticalContentAlignment="Center"/>
+
+                <DatePicker x:Name="dpData"
+                            Width="150"
+                            Height="28"
+                            Margin="0,0,10,0"/>
+
+                <TextBox x:Name="txtTemperatura"
+                         Width="110"
+                         Height="28"
+                         Margin="0,0,10,0"
+                         ToolTip="Temperatura"
+                         VerticalContentAlignment="Center"/>
+
+                <Button Content="Dodaj pomiar"
+                        Width="120"
+                        Height="28"
+                        Click="btnDodaj_Click"/>
+            </WrapPanel>
+
+            <WrapPanel>
+                <Button Content="Wczytaj plik"
+                        Width="120"
+                        Margin="0,0,10,0"
+                        Click="btnWczytaj_Click"/>
+
+                <Button Content="Zapisz pomiary"
+                        Width="120"
+                        Margin="0,0,10,0"
+                        Click="btnZapisz_Click"/>
+
+                <TextBlock x:Name="lblInfo"
+                           VerticalAlignment="Center"
+                           Foreground="DarkGreen"/>
+            </WrapPanel>
+
+        </StackPanel>
+    </Grid>
+</Window>
